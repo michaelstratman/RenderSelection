@@ -2,25 +2,44 @@
 (function() {
 
   chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    var _this = this;
-    return chrome.tabs.create({
-      "active": true,
-      "url": chrome.extension.getURL('render.html')
-    }, function(tab) {
-      var port;
-      port = chrome.extension.connect({
-        name: 'renderHTMl'
+    var selection,
+      _this = this;
+    if (info.menuItemId === 'renderselection') {
+      selection = info.selectionText;
+      return chrome.tabs.create({
+        "active": true,
+        "url": chrome.extension.getURL('render.html')
+      }, function(tab) {
+        var port;
+        port = chrome.extension.connect({
+          name: 'renderHTMl'
+        });
+        return port.postMessage(['renderhtml', selection]);
       });
-      return port.postMessage(['renderhtml', info.selectionText]);
-    });
+    } else if (info.menuItemId === 'renderclipboard') {
+      return chrome.tabs.create({
+        "active": true,
+        "url": chrome.extension.getURL('render.html')
+      }, function(tab) {
+        var port;
+        port = chrome.extension.connect({
+          name: 'renderHTMl'
+        });
+        return port.postMessage(['renderclipboard']);
+      });
+    }
   });
 
   chrome.runtime.onInstalled.addListener(function() {
-    console.log('fdafa');
-    return chrome.contextMenus.create({
+    chrome.contextMenus.create({
       "title": "Render Selection as HTML",
       "contexts": ["selection"],
-      "id": "renderhtml"
+      "id": "renderselection"
+    });
+    return chrome.contextMenus.create({
+      "title": "Render Clipboard as HTML",
+      "contexts": ["page"],
+      "id": "renderclipboard"
     });
   });
 

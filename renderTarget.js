@@ -6,10 +6,22 @@
 
   chrome.extension.onConnect.addListener(function(port) {
     return port.onMessage.addListener(function(message) {
-      var selection;
+      var result, sandbox, selection;
       if (message[0] === 'renderhtml') {
         selection = message[1];
-        return document.body.innerHTML = selection;
+        $('#content').html(selection);
+      }
+      if (message[0] === 'renderclipboard') {
+        result = '';
+        $("#sandbox").show();
+        sandbox = $('#sandbox').val('').select();
+        if (document.execCommand('paste')) {
+          result = sandbox.val();
+        }
+        console.log(result);
+        sandbox.val('');
+        $("#sandbox").hide();
+        return $('#content').html(result);
       }
     });
   });
