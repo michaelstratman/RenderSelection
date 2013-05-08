@@ -1,0 +1,23 @@
+{
+  "name": "Render Selection",
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "version": "0.4",
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
+  "content_scripts": [ {
+    "js": [ "jquery.js"],
+    "matches": [ "http://*/*", "https://*/*"]
+    }
+  ],
+   "icons": {
+    "16": "icon.png"
+  },
+  "manifest_version": 2
+}
